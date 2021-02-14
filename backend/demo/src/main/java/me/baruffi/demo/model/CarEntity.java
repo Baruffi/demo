@@ -24,7 +24,7 @@ public class CarEntity {
 	private Integer ano;
 
 	@Column(columnDefinition = "TEXT")
-	private String description;
+	private String descricao;
 
 	private Boolean vendido;
 
@@ -35,12 +35,12 @@ public class CarEntity {
 	public CarEntity() {
 	}
 
-	public CarEntity(String veiculo, String marca, Integer ano, String description, Boolean vendido, Date created,
+	public CarEntity(String veiculo, String marca, Integer ano, String descricao, Boolean vendido, Date created,
 			Date updated) {
 		this.veiculo = veiculo;
 		this.marca = marca;
 		this.ano = ano;
-		this.description = description;
+		this.descricao = descricao;
 		this.vendido = vendido;
 		this.created = created;
 		this.updated = updated;
@@ -78,12 +78,12 @@ public class CarEntity {
 		this.ano = ano;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	public Boolean getVendido() {
@@ -112,7 +112,7 @@ public class CarEntity {
 
 	@Override
 	public String toString() {
-		return "CarEntity [ano=" + ano + ", created=" + created + ", description=" + description + ", id=" + id
-				+ ", marca=" + marca + ", updated=" + updated + ", veiculo=" + veiculo + ", vendido=" + vendido + "]";
+		return "CarEntity [ano=" + ano + ", created=" + created + ", descricao=" + descricao + ", id=" + id + ", marca="
+				+ marca + ", updated=" + updated + ", veiculo=" + veiculo + ", vendido=" + vendido + "]";
 	}
 }

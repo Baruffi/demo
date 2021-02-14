@@ -46,9 +46,9 @@ export default function Header() {
 						Demo
 					</Link>
 				</Typography>
-				<Tooltip title="Dashboard">
-					<Button color="inherit" onClick={() => push('/app')}>
-						Dashboard
+				<Tooltip title="Veiculos">
+					<Button color="inherit" onClick={() => push('/veiculos')}>
+						Veiculos
 					</Button>
 				</Tooltip>
 			</Toolbar>

@@ -9,7 +9,7 @@ export default function ErrorPage() {
 
 			<Container>
 				<h1 style={{ color: '#333', textAlign: 'center' }}>
-					That page does not exist on our server.
+					Essa página não existe.
 				</h1>
 			</Container>
 		</>

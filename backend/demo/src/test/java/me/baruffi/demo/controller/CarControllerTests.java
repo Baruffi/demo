@@ -1,6 +1,7 @@
 package me.baruffi.demo.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.when;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.data.domain.Example;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import me.baruffi.demo.interfaces.DateTime;
 import me.baruffi.demo.model.CarEntity;
 import me.baruffi.demo.repo.CarRepository;
 
@@ -32,16 +34,25 @@ class CarControllerTests {
 	@Mock
 	private CarRepository repository;
 
+	@Mock
+	private DateTime dateTime;
+
 	@InjectMocks
 	private CarController controller;
 
 	private List<CarEntity> cars = new ArrayList<>();
 
-	@BeforeEach
-	void setup() {
-		cars.clear();
+	private static Date currentDate;
 
-		Date currentDate = new Date(System.currentTimeMillis());
+	@BeforeEach
+	void testSetup() {
+		// Garante que todas as datas obtidas durante o teste serão iguais
+		currentDate = new Date();
+
+		when(dateTime.getDate()).thenReturn(currentDate);
+
+		// Garante uma lista inicial de carros para usar como "banco de dados"
+		cars.clear();
 
 		CarEntity testCar1 = new CarEntity("Fusca", "Ford", 1989, "Carro não eficiente e descomfortável", false,
 				currentDate, currentDate);
@@ -79,21 +90,7 @@ class CarControllerTests {
 		when(repository.findAll(Example.of(searchCar))).thenReturn(cars);
 
 		// When
-		List<CarEntity> foundCars = controller.find(searchCar, null);
-
-		// Then
-		assertTrue(carNamesMatch(cars, foundCars));
-	}
-
-	@Test
-	void findByDecadeTest() {
-		// Given
-		cars.remove(0);
-
-		when(repository.findByDecade(1999)).thenReturn(cars);
-
-		// When
-		List<CarEntity> foundCars = controller.find(null, 1999);
+		List<CarEntity> foundCars = controller.find(searchCar);
 
 		// Then
 		assertTrue(carNamesMatch(cars, foundCars));
@@ -114,9 +111,8 @@ class CarControllerTests {
 	@Test
 	void newCarTest() {
 		// Given
-		Date currentDate = new Date(System.currentTimeMillis());
 		CarEntity newCar = new CarEntity("Celta 3", "Chevrolet", 1993, "Mais outro carro eficiente e comfortável",
-				false, currentDate, currentDate);
+				false, null, null);
 
 		when(repository.save(newCar)).thenAnswer(new Answer<CarEntity>() {
 			public CarEntity answer(InvocationOnMock invocation) {
@@ -133,14 +129,16 @@ class CarControllerTests {
 		// Then
 		assertEquals(4, allCars.size());
 		assertTrue(carNamesMatch(newCar, allCars.get(3)));
+		assertFalse(allCars.get(3).getVendido());
+		assertEquals(currentDate, allCars.get(3).getCreated());
+		assertEquals(currentDate, allCars.get(3).getUpdated());
 	}
 
 	@Test
-	void replaceCarTest() {
+	void replaceCarTest_replaceCar() {
 		// Given
-		Date currentDate = new Date(System.currentTimeMillis());
 		CarEntity newCar = new CarEntity("Celta 3", "Chevrolet", 1993, "Mais outro carro eficiente e comfortável",
-				false, currentDate, currentDate);
+				false, currentDate, null);
 
 		when(repository.save(newCar)).thenAnswer(new Answer<CarEntity>() {
 			public CarEntity answer(InvocationOnMock invocation) {
@@ -148,6 +146,7 @@ class CarControllerTests {
 				return newCar;
 			}
 		});
+		when(repository.findById(1L)).thenReturn(Optional.of(newCar));
 		when(repository.findAll()).thenReturn(cars);
 
 		// When
@@ -156,28 +155,41 @@ class CarControllerTests {
 
 		// Then
 		assertTrue(carNamesMatch(cars, allCars));
+		assertEquals(currentDate, allCars.get(0).getCreated());
+		assertEquals(currentDate, allCars.get(0).getUpdated());
+	}
 
+	@Test
+	void replaceCarTest_newCar() {
 		// Given
+		CarEntity newCar = new CarEntity("Celta 3", "Chevrolet", 1993, "Mais outro carro eficiente e comfortável",
+				false, currentDate, null);
+
 		when(repository.save(newCar)).thenAnswer(new Answer<CarEntity>() {
 			public CarEntity answer(InvocationOnMock invocation) {
 				cars.add(newCar);
 				return newCar;
 			}
 		});
+		when(repository.findById(1L)).thenReturn(Optional.empty());
+		when(repository.findAll()).thenReturn(cars);
 
 		// When
 		controller.replaceCar(newCar, 5L);
-		allCars = controller.all();
+		List<CarEntity> allCars = controller.all();
 
 		// Then
 		assertEquals(4, allCars.size());
 		assertEquals(5L, allCars.get(3).getId());
+		assertEquals(currentDate, allCars.get(3).getCreated());
+		assertEquals(currentDate, allCars.get(3).getUpdated());
 	}
 
 	@Test
 	void editCarTest() {
 		// Given
 		CarEntity newCar = new CarEntity();
+
 		boolean vendido = true;
 
 		newCar.setVendido(vendido);
@@ -198,6 +210,7 @@ class CarControllerTests {
 		// Then
 		assertTrue(carNamesMatch(cars, allCars));
 		assertEquals(vendido, allCars.get(0).getVendido());
+		assertEquals(currentDate, allCars.get(0).getUpdated());
 	}
 
 	@Test
