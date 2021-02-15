@@ -43,7 +43,7 @@ O cadastro de veículos se encontra na página `Veículos` do frontend, acessív
 
 ## Execução do projeto
 
-Se você possui o [docker](https://www.docker.com/), basta executar o comando `docker-compose up` na pasta raiz do projeto.
+Se você possui o [docker](https://www.docker.com/), basta executar o comando `docker-compose up` na pasta raiz do projeto e acessar a url `http://localhost:5000` em seu navegador quando todas as builds estiverem concluídas.
 
 Senão, é necessário ter um banco de dados [mysql](https://www.mysql.com/) rodando localmente com a database `demo-db`, assim como ter instalado [java jdk 8 ou superior](https://www.oracle.com/br/java/technologies/javase/javase-jdk8-downloads.html) e [maven](https://maven.apache.org/) para o back. Junto de [node](https://nodejs.org/pt-br/) e [yarn](https://yarnpkg.com/) para o front.
 

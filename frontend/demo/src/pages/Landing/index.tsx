@@ -24,7 +24,7 @@ export default function Landing() {
 	return (
 		<>
 			<Header />
-			<Container>
+			<Container style={{ marginTop: 10 }}>
 				<Grid container spacing={2}>
 					<Grid item xs={3}>
 						<Typography variant="h5" gutterBottom>
