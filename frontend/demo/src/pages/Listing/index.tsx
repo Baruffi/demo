@@ -1,4 +1,5 @@
 import { Container } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 import React, { useEffect, useState } from 'react';
 import CarForm from '../../components/CarForm';
 import CarList from '../../components/CarList';
@@ -50,6 +51,9 @@ export default function Listing() {
 		<>
 			<Header />
 			<Container style={{ marginTop: 10 }}>
+				<Typography variant="h5" gutterBottom>
+					Cadastro de veículos
+				</Typography>
 				<CarForm
 					canBeSold={selectedCar !== undefined}
 					car={
@@ -64,6 +68,7 @@ export default function Listing() {
 					submitCar={submitCar}
 					cancel={cancel}
 				/>
+				<div style={{ height: 50 }} />
 				<CarList
 					rows={allCars}
 					edit={selectCar}

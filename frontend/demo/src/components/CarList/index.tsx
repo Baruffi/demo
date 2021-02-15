@@ -78,7 +78,7 @@ export default function CarList({ rows, edit, deleteById }: IProps) {
 					</caption>
 					<TableHead>
 						<TableRow>
-							<TableCell>Veiculo</TableCell>
+							<TableCell>Veículo</TableCell>
 							<TableCell>Descrição</TableCell>
 							<TableCell>Fabricante</TableCell>
 							<TableCell>Ano</TableCell>

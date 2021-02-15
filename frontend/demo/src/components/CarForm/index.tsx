@@ -54,7 +54,7 @@ export default function CarForm({ canBeSold, car, submitCar, cancel }: IProps) {
 			<Grid container justify="center" spacing={2}>
 				<Grid item xs={12}>
 					<TextField
-						label="Veiculo"
+						label="Veículo"
 						value={carData.veiculo}
 						onChange={(e) => {
 							setCarField('veiculo', e.target.value);
